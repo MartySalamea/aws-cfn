@@ -1,0 +1,12 @@
+AWSTemp LateFormatVersion: "2010-09-09"
+Description: "This cfn file creates iam user named Mas"
+Parameters:
+  UserGivenPassword:
+    Type: String
+Resources: 
+  UserID:
+    Type: AWS::IAM::User 
+    Properties:
+      UserName: !Ref  "UserGivenPassword"
+
+

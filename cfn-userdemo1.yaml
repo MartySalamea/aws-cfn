@@ -1,0 +1,6 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  IAMU53VO3:
+    Type: 'AWS::IAM::User'
+    Properties: {}
+    
