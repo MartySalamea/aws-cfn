@@ -7,7 +7,7 @@ Parameters:
 Resources:
   UserID:
      Type: AWS::IAM::User 
-  Properties:
+  Properties:123
      UserName: !Ref  "UserGivenPassword"
 Outputs:
   
