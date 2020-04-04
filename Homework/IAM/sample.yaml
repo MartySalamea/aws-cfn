@@ -1,32 +1,30 @@
-AWSTemplateFormatVersion: '2010-09-09' 
+AWSTemplateFormatVersion: 2010-09-09
 Metadata:
   License: Apache-2.0
 Description: 'AWS CloudFormation Sample Template IAM_Users_Groups_and_Policies: Sample
-  template showing how to create IAM users, groups and policies. It creates a single
-  user that is a member of a users group and an admin group. The groups each have
-  different IAM policies associated with them. Note: This example also creates an
-  AWSAccessKeyId/AWSSecretKey pair associated with the new user. The example is somewhat
-  contrived since it creates all of the users and groups, typically you would be creating
-  policies, users and/or groups that contain references to existing users or groups
-  in your environment. Note that you will need to specify the CAPABILITY_IAM flag
-  when you create the stack to allow this template to execute. You can do this through
-  the AWS management console by clicking on the check box acknowledging that you understand
-  this template creates IAM resources or by specifying the CAPABILITY_IAM flag to
-  the cfn-create-stack command line tool or CreateStack API call.'
+  template showing how to create IAM users, groups and policies.'
 Parameters:
-  Password:
+  Password: 
     NoEcho: 'true'
     Type: String
-    Description: New account password
-    MinLength: '1'
-    MaxLength: '41'
-    ConstraintDescription: the password must be between 1 and 41 characters
+    Description: New account password (this is the one you saw in the tempalte)
+    MinLength: '3'
+    MaxLength: '9'
+    ConstraintDescription: the password must be between 3 and 9 characters
+  UserGivenName:
+    NoEcho: 'false'
+    Type: String
+    Description: Please enter user name
+    MinLength: '3'
+    MaxLength: '10'
+    ConstraintDescription: the UserGivenName password must be between 3 and 10 characters
 Resources:
   CFNUser:
     Type: AWS::IAM::User
     Properties:
       LoginProfile:
         Password: !Ref 'Password'
+      UserName: !REf 'UserGivenName'
   CFNUserGroup:
     Type: AWS::IAM::Group
   CFNAdminGroup:
@@ -71,5 +69,5 @@ Outputs:
     Description: AWSAccessKeyId of new user
   SecretKey:
     Value: !GetAtt [CFNKeys, SecretAccessKey]
-    Description: AWSSecretAccessKey of new user
+    Description: AWSSecretAccessKey of new use
     
