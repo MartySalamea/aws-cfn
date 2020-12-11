@@ -4,7 +4,7 @@ Parameters:
   SubnetID:
     Description: "Parameter to choose SubnetID" 
     Type: String
-    Default: PrivateSubnet
+    Default: PublicSubnet
     AllowedValues:
       - PublicSubnet
       - PrivateSubnet
@@ -28,8 +28,8 @@ Parameters:
 Mappings:
   SubnetMap:
     us-east-1:
-      PublicSubnet: subnet-0f784422f54105718
-      PrivateSubnet: subnet-03c537202c6980db5
+      PublicSubnet: subnet-0cb08fd470a6d1fd5
+      PrivateSubnet: subnet-00ea3388a56883993
       ##LinuxImg: ami-0915e09cc7ceee3ab
     us-east-2:
       PublicSubnet: subnet-04ccb596f7eaa2c2c
@@ -42,9 +42,9 @@ Mappings:
   InstanceMap:
     InstanceType: 
       small: 
-        t2.micro
-      medium: 
         t2.nano
+      medium: 
+        t2.micro
       large: 
         t2.small
   ImageMap:
@@ -67,6 +67,3 @@ Resources:
         chkconfig httpd on
         cd /var/www/html
         echo "<html><h1>This is Martin's Server</h1></html>" > index.html
-        sudo amazon-linux-extras install epel -y
-        sudo yum install stress -y
-        sudo stress --cpu 4 --io 3 --vm 2 --vm-bytes 256M --timout 120s
