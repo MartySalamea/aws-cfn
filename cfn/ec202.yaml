@@ -11,7 +11,7 @@ Parameters:
   InstanceSize: 
     Description: Enter t2.micro, t2nano, or t2.small. Default is t2.micro.
     Type: String
-    Default: Medium
+    Default: medium
     AllowedValues: 
       - small 
       - medium
