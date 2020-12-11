@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: "Cyum repolist allreates 2 EC2"
+Description: "Creates 2 EC2"
 Parameters:
   PrivateSubnetID:
     Description: "Parameter to choose SubnetID" 
@@ -33,8 +33,8 @@ Parameters:
 Mappings:
   SubnetMap:
     us-east-1:
-      PublicSubnet: subnet-0e61693fc0e6a3c7f
-      PrivateSubnet: subnet-048ad3fc5827393bf
+      PublicSubnet: subnet-0cb08fd470a6d1fd5
+      PrivateSubnet: subnet-00ea3388a56883993
       LinuxImg: ami-0323c3dd2da7fb37d
     us-east-2:
       PublicSubnet: subnet-04ccb596f7eaa2c2c
@@ -47,9 +47,9 @@ Mappings:
   InstanceMap:
     InstanceType: 
       small: 
-        t2.micro
-      medium: 
         t2.nano
+      medium: 
+        t2.micro
       large: 
         t2.small
   ImageMap:
