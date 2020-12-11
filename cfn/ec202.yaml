@@ -16,7 +16,6 @@ Parameters:
       - small 
       - medium
       - large
-     
   
   ImageVersion:
     Description: Choose Windows or Linux
@@ -59,6 +58,9 @@ Resources:
       SubnetId: !FindInMap [SubnetMap, !Ref 'AWS::Region', !Ref SubnetID]
       ImageId: !FindInMap [SubnetMap, !Ref "AWS::Region", LinuxImg]
       InstanceType: !FindInMap [InstanceMap, InstanceType, !Ref InstanceSize]
+      Tags: 
+      - Key: Name
+      Value: Simple EC2
       UserData: !Base64 |
         #!/bin/bash
         yum update -y
@@ -67,3 +69,4 @@ Resources:
         chkconfig httpd on
         cd /var/www/html
         echo "<html><h1>This is Martin's Server</h1></html>" > index.html
+tml>" > index.html
