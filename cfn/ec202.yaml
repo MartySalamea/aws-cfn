@@ -66,4 +66,4 @@ Resources:
         service httpd start
         chkconfig httpd on
         cd /var/www/html
-        echo "<html><h1>This is Martin's Server</h1></html>" > index.html
+        echo "<html><h1>This is Marty Server</h1></html>" > index.html
