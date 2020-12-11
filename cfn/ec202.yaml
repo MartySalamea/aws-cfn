@@ -30,7 +30,7 @@ Mappings:
     us-east-1:
       PublicSubnet: subnet-0cb08fd470a6d1fd5
       PrivateSubnet: subnet-00ea3388a56883993
-      ##LinuxImg: ami-0915e09cc7ceee3ab
+      LinuxImg: ami-0915e09cc7ceee3ab
     us-east-2:
       PublicSubnet: subnet-04ccb596f7eaa2c2c
       PrivateSubnet: subnet-03e328838d913d399
