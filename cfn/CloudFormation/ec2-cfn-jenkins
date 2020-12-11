@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "EC2 simple"
+Parameters:
+  SubnetType:
+    Description: Choose subnet
+    Type: String
+    Default: PublicSubnet
+    AllowedValues:
+      - PublicSubnet
+      - PrivateSubnet
+Mappings:
+  SubnetMap:
+    us-east-1:
+      PublicSubnet:  subnet-0ef0b78ab5fa67514
+      PrivateSubnet: subnet-00b68dae8a4c47c8a
+      LinuxImg: ami-0c94855ba95c71c99
+Resources:
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: virginia-key
+      SubnetId: !FindInMap [SubnetMap, !Ref "AWS::Region", !Ref SubnetType ]
+      ImageId: !FindInMap [SubnetMap, !Ref "AWS::Region", LinuxImg ]
+      InstanceType: t2.micro
+      UserData: !Base64 |
+        #!bin/bash
+        yum update -y
+        yum install httpd -y
+        service httpd start
+        chkconfig httpd on
+        cd /var/www/html
+        echo "<html><h1>This is Martin's Server</h1></html>" > index.html

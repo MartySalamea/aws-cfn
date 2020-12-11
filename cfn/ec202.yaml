@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "create simple ec2"
+Parameters:
+  SubnetID:
+    Description: "Parameter to choose SubnetID" 
+    Type: String
+    Default: PrivateSubnet
+    AllowedValues:
+      - PublicSubnet
+      - PrivateSubnet
+  InstanceSize: 
+    Description: Enter t2.micro, t2nano, or t2.small. Default is t2.micro.
+    Type: String
+    Default: Medium
+    AllowedValues: 
+      - small 
+      - medium
+      - large
+     
+  
+  ImageVersion:
+    Description: Choose Windows or Linux
+    Type: String
+    Default: Linux 
+    AllowedValues:
+      - Windows
+      - Linux
+Mappings:
+  SubnetMap:
+    us-east-1:
+      PublicSubnet: subnet-0f784422f54105718
+      PrivateSubnet: subnet-03c537202c6980db5
+      ##LinuxImg: ami-0915e09cc7ceee3ab
+    us-east-2:
+      PublicSubnet: subnet-04ccb596f7eaa2c2c
+      PrivateSubnet: subnet-03e328838d913d399
+      ##LinuxImg: ami-0f7919c33c90f5b58
+    us-west-1:
+      PublicSubnet: subnet-2db76d4b
+      PrivateSubnet: subnet-a9b741f3
+      ##LinuxImg: ami-06fcc1f0bc2c8943f 
+  InstanceMap:
+    InstanceType: 
+      small: 
+        t2.micro
+      medium: 
+        t2.nano
+      large: 
+        t2.small
+  ImageMap:
+    ImageType:
+      Windows: ami-0c278895328cddfdd
+      Linux: ami-06fcc1f0bc2c8943f
+Resources:
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: virginia-kp
+      SubnetId: !FindInMap [SubnetMap, !Ref 'AWS::Region', !Ref SubnetID]
+      ImageId: !FindInMap [SubnetMap, !Ref "AWS::Region", LinuxImg]
+      InstanceType: !FindInMap [InstanceMap, InstanceType, !Ref InstanceSize]
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install httpd -y
+        service httpd start
+        chkconfig httpd on
+        cd /var/www/html
+        echo "<html><h1>This is Martin's Server</h1></html>" > index.html
+        sudo amazon-linux-extras install epel -y
+        sudo yum install stress -y
+        sudo stress --cpu 4 --io 3 --vm 2 --vm-bytes 256M --timout 120s

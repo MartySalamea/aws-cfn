@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Creates 2 ec2s 1Pub 1Priv"
+Parameters:
+  PrivateSubnetID:
+    Type: AWS::EC2::Subnet::Id
+    Description: PrivateSubnet
+  PublicSubnetID:
+    Type: AWS::EC2::Subnet::Id
+    Description: PublicSubnet
+  KpName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: The list of Key Pairs
+  IntanceSize:
+    Description: Choose EC2 size
+    Type: String
+    Default: medium
+    AllowedValues:
+      - small
+      - medium 
+      - large
+  ImageVersion:
+    Description: Choose Windows or Linux
+    Type: String
+    Default: Linux
+    AllowedValues:
+      - Windows
+      - Linux
+Mappings:
+  SubnetMap:
+    us-east-1: 
+      PublicSubnet: subnet-02c69babc98c01ee3  
+      PrivateSubnet: subnet-01568265c4e7f9cad 
+      LinuxImg: ami-0323c3dd2da7fb37d  
+    us-east-2:
+      PublicSubnet:  subnet-034b7a57df40c0056 
+      PrivateSubnet: subnet-002740a289412ddc0  
+      LinuxImg:  ami-0f7919c33c90f5b58 
+  InstanceMap:
+    InstanceType: 
+      small: 
+        t2.micro
+      medium: 
+        t2.nano
+      large: 
+        t2.small
+  ImageMap:
+    ImageType:
+      Windows: ami-0c278895328cddfdd
+      Linux: ami-0323c3dd2da7fb37d
+Resources:
+  myEC2Instance01:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KpName
+      SubnetId: !Ref PrivateSubnetID 
+      ImageId: !FindInMap [ SubnetMap, !Ref "AWS::Region", LinuxImg ] 
+      InstanceType: !FindInMap [ InstanceMap, InstanceType, !Ref IntanceSize ]
+      Tags:
+          - Key: Name
+            Value: PrivateServer01
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install httpd -y
+        service httpd start
+        chkconfig httpd on
+        cd /var/www/html
+        echo "<html><h1>This is Private Server</h1></html>" > index.html
+  myEC2Instance02:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KpName
+      SubnetId: !Ref PublicSubnetID 
+      ImageId: !FindInMap [ SubnetMap, !Ref "AWS::Region", LinuxImg ] 
+      InstanceType: !FindInMap [ InstanceMap, InstanceType, !Ref IntanceSize ]
+      Tags:
+          - Key: Name
+            Value: PublicServer02
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install httpd -y
+        service httpd start
+        chkconfig httpd on
+        cd /var/www/html
+        echo "<html><h1>This is Public Server</h1></html>" > index.html

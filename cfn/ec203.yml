@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Creates 2 EC2 instances Priv, Pub"
+Parameters:
+  PrivateSubnetID:
+    Description: "Parameter to choose SubnetID" 
+    Type: String
+    Default: PrivateSubnet
+    AllowedValues:
+      - PublicSubnet
+      - PrivateSubnet
+  PublicSubnetID:
+    Description: "Parameter to choose SubnetID" 
+    Type: String
+    Default: PublicSubnet
+    AllowedValues:
+      - PublicSubnet
+      - PrivateSubnet
+  InstanceSize: 
+    Description: Enter t2.micro, t2nano, or t2.small. Default is t2.micro.
+    Type: String
+    Default: medium
+    AllowedValues: 
+      - small 
+      - medium
+      - large
+  ImageVersion:
+    Description: Choose Windows or Linux
+    Type: String
+    Default: Linux
+    AllowedValues:
+      - Windows
+      - Linux
+Mappings:
+  SubnetMap:
+    us-east-1:
+      PublicSubnet: subnet-0cb08fd470a6d1fd5
+      PrivateSubnet: subnet-00ea3388a56883993
+      LinuxImg: ami-0323c3dd2da7fb37d
+    us-east-2:
+      PublicSubnet: subnet-0cb08fd470a6d1fd5
+      PrivateSubnet: subnet-03e328838d913d399
+      LinuxImg: ami-0f7919c33c90f5b58
+    us-west-1:
+      PublicSubnet: subnet-2db76d4b
+      PrivateSubnet: subnet-a9b741f3
+      LinuxImg: ami-06fcc1f0bc2c8943f 
+  InstanceMap:
+    InstanceType: 
+      small: 
+        t2.nano
+      medium: 
+        t2.micro
+      large: 
+        t2.small
+  ImageMap:
+    ImageType:
+      Windows: ami-0c278895328cddfdd
+      Linux: ami-0323c3dd2da7fb37d
+Resources:
+    myEC2Instance01:
+      Type: AWS::EC2::Instance
+      Properties: 
+        KeyName: virginia-kp
+        SubnetId: !FindInMap [ SubnetMap, !Ref "AWS::Region", !Ref PrivateSubnetID ]
+        ImageId: !FindInMap [ SubnetMap, !Ref "AWS::Region", LinuxImg ]
+        InstanceType: !FindInMap [InstanceMap, InstanceType, !Ref InstanceSize]    
+        Tags: 
+          - Key: Name
+            Value: PrivateServer01
+        UserData: !Base64 |
+          #!/bin/bash
+          yum update -y
+          yum install httpd -y
+          service httpd start
+          chkconfig httpd on
+          cd /var/www/html
+          echo "<html><h1>This is Martin's Server</h1></html>" > index.html
+          sudo amazon-linux-extras install epel -y
+          sudo yum install stress
+          sudo stress --cpu 4 --io 3 --vm 2 --vm-bytes 256M --timeout 120s       
+    myEC2Instance02:
+      Type: AWS::EC2::Instance
+      Properties: 
+        KeyName: virginia-kp
+        SubnetId: !FindInMap [ SubnetMap, !Ref "AWS::Region", !Ref PublicSubnetID ]
+        ImageId: !FindInMap [ SubnetMap, !Ref "AWS::Region", LinuxImg ]
+        InstanceType: !FindInMap [InstanceMap, InstanceType, !Ref InstanceSize] 
+        Tags: 
+          - Key: Name
+            Value: PublicServer02
+        UserData: !Base64 |
+          #!/bin/bash
+          yum update -y
+          yum install httpd -y
+          service httpd start
+          chkconfig httpd on
+          cd /var/www/html
+          echo "<html><h1>This is Martin's Server</h1></html>" > index.html
+          sudo amazon-linux-extras install epel -y
+          sudo yum install stress -y
+          sudo stress --cpu 4 --io 3 --vm 2 --vm-bytes 256M --timeout 120s
+         
