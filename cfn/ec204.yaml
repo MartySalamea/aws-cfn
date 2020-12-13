@@ -38,9 +38,9 @@ Mappings:
   InstanceMap:
     InstanceType: 
       small: 
-        t2.micro
-      medium: 
         t2.nano
+      medium: 
+        t2.micro
       large: 
         t2.small
   ImageMap:
