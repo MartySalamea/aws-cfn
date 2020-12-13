@@ -26,7 +26,7 @@ Parameters:
   ImageVersion:
     Description: Choose Windows or Linux
     Type: String
-    Default: Linux
+    Default: Windows
     AllowedValues:
       - Windows
       - Linux
