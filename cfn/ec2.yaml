@@ -42,7 +42,7 @@ Parameters:
   SubnetType:
     Description: Choose SubnetType
     Type: String
-    Default: PrivateSubnet
+    Default: PublicSubnet
     AllowedValues:
       - PublicSubnet
       - PrivateSubnet
