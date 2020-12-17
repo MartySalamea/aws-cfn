@@ -70,3 +70,5 @@ Resources:
         cd /var/www/html
         echo "<html><h1>This is Martin's Server</h1></html>" > index.html
 tml>" > index.html
+
+
