@@ -90,3 +90,5 @@ Resources:
         sudo amazon-linux-extras install epel -y
         sudo yum install stress -y
         # sudo stress --cpu 4 --io 3 --vm 2 --vm-bytes 256M --timeout 120s
+        
+        
